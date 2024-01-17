@@ -1,5 +1,5 @@
 {
-  "name": "tree-demo",
+  "name": "three-demo",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,8 +9,12 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "events": "^3.3.0",
     "three": "^0.160.0",
-    "vite": "^5.0.8",
-    "events": "^3.3.0"
+    "vite": "^5.0.8"
+  },
+  "dependencies": {
+    "eslint": "^8.56.0",
+    "gsap": "^3.12.4"
   }
 }

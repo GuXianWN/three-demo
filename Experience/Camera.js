@@ -23,7 +23,7 @@ export default class Camera {
     createPerspectiveCamera() {
         this.perspectiveCamera = new THREE.PerspectiveCamera(35, this.sizes.aspect, 0.1, 1000)
         this.scene.add(this.perspectiveCamera)
-        this.perspectiveCamera.position.set(40,40,40)
+        this.perspectiveCamera.position.set(30, 30, 30)
     }
 
     // 正交摄像机 (createOrthographicCamera)
@@ -32,12 +32,14 @@ export default class Camera {
     // 应用场景: 它常用于工程和建筑视图、某些类型的2D游戏，以及任何需要从固定角度查看对象而无需深度感的情况。
     // 特点: 物体的大小不会因为远近而改变，没有深度感，适合需要平面和规模精确的场景。
     createOrthographicCamera() {
-        this.frustrum = 5
-        const right = (this.frustrum * this.sizes.aspect) / 2
+        const right = (this.sizes.frustrum * this.sizes.aspect) / 2
         const top = this.sizes.frustrum / 2
 
-        this.orthographicCamera = new THREE.OrthographicCamera(-right, right, top, -top, 100, -100)
+        this.orthographicCamera = new THREE.OrthographicCamera(-right, right, top, -top, 30, -30)
         this.scene.add(this.orthographicCamera)
+
+        this.helper = new THREE.CameraHelper(this.orthographicCamera)
+        this.scene.add(this.helper)
     }
 
     setOrbitControls() {
@@ -52,8 +54,7 @@ export default class Camera {
         this.perspectiveCamera.aspect = this.sizes.aspect
         this.perspectiveCamera.updateProjectionMatrix()
 
-        this.frustrum = 5
-        const right = (this.frustrum * this.sizes.aspect) / 2
+        const right = (this.sizes.frustrum * this.sizes.aspect) / 2
         const top = this.sizes.frustrum / 2
 
         this.orthographicCamera.left = -right
@@ -64,6 +65,10 @@ export default class Camera {
     }
 
     update() {
-
+        // console.log(this.perspectiveCamera.position)
+        this.helper.matrixWorldNeedsUpdate=true
+        this.helper.update()
+        this.helper.position.copy(this.orthographicCamera)
+        this.controls.update()
     }
 }
