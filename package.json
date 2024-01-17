@@ -14,7 +14,6 @@
     "vite": "^5.0.8"
   },
   "dependencies": {
-    "eslint": "^8.56.0",
-    "gsap": "^3.12.4"
+    "eslint": "^8.56.0"
   }
 }

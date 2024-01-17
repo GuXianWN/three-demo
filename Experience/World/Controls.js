@@ -1,6 +1,5 @@
 import Experience from "../Experience.js";
 import * as THREE from "three";
-import
 
 export default class Controls {
     constructor() {
@@ -8,15 +7,24 @@ export default class Controls {
         this.scene = this.experience.scene
         this.camera = this.experience.camera
 
-        this.progress = 0
-        this.dummyCurve = new THREE.Vector3(0, 0, 0);
+        this.position = new THREE.Vector3(0, 0, 0);
+
+        // Linear Interpolation" 的缩写，意为线性插值
+        this.lerp = {
+            current: 0,
+            target: 0,
+            ease: 0.1
+        }
+
         this.setPath()
         this.onWheel()
     }
 
-    onWheel(){
-        window.addEventListener("wheel",(e)=>{
-            console.log(e)
+    // 鼠标滚轮滚动监听 调整轨道进度
+    onWheel() {
+        let speed = 0.05
+        window.addEventListener("wheel", (e) => {
+            this.lerp.target = this.lerp.target + (e.deltaY > 0 ? speed : -speed)
         })
     }
 
@@ -27,7 +35,7 @@ export default class Controls {
             new THREE.Vector3(0, 0, 0),
             new THREE.Vector3(5, -5, 5),
             new THREE.Vector3(10, 0, 10)
-        ],true);
+        ], true);
         // closed 轨道循环
 
         const points = this.curve.getPoints(50);
@@ -40,9 +48,14 @@ export default class Controls {
     }
 
     update() {
-        this.dummyCurve = new THREE.Vector3(0, 0, 0);
-        this.curve.getPointAt(this.progress%1, this.dummyCurve)
-        this.progress += 0.001
-        this.camera.orthographicCamera.position.copy(this.dummyCurve)
+        this.lerp.target += 0.0005
+        if (this.lerp.target < 0) {
+            this.lerp.target += 1
+            this.lerp.current += 1
+        }
+        this.lerp.current += (this.lerp.target - this.lerp.current) * this.lerp.ease
+
+        this.curve.getPointAt(this.lerp.current % 1, this.position)
+        this.camera.orthographicCamera.position.copy(this.position)
     }
 }

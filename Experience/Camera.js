@@ -1,7 +1,6 @@
 import Experience from "./Experience.js";
 import * as THREE from 'three'
 import {OrbitControls} from "three/addons";
-import {GridHelper} from "three";
 
 export default class Camera {
     constructor() {
@@ -46,7 +45,7 @@ export default class Camera {
         let controls = new OrbitControls(this.perspectiveCamera, this.canvas);
         // 默认值就为true
         controls.enableDamping = true
-        controls.enableZoom = true
+        controls.enableZoom = false
         this.controls = controls
     }
 
